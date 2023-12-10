@@ -274,7 +274,7 @@ class ProfileView extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             Text(
-              'Member since Month Year',
+              'Member since December 2023',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             SizedBox(height: 16.0),
