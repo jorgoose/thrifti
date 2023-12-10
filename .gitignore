@@ -38,6 +38,9 @@ migrate_working_dir/
 # iOS/XCode related
 /ios/
 
+# Linux related
+/linux/
+
 # MacOS related
 /macos/
 

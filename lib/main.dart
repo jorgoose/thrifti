@@ -5,118 +5,141 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  int _selectedIndex = 0;
+
+  static List<Widget> _widgetOptions = <Widget>[
+    FeedView(),
+    Text('Your Finds'),
+    Text('Search'),
+    Text('Favorites'),
+    ProfileView(), // This is the new profile view
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'thrifti',
-            style: TextStyle(
-              color: Colors.purple,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(SimpleLineIcons.list),
+              label: 'Feed',
             ),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(SimpleLineIcons.bell, color: Colors.black),
-              onPressed: () {
-                // Handle notification bell press
-              },
+            BottomNavigationBarItem(
+              icon: Icon(SimpleLineIcons.heart),
+              label: 'Your Finds',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(SimpleLineIcons.magnifier),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(SimpleLineIcons.star),
+              label: 'Favorites',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(SimpleLineIcons.user),
+              label: 'Profile',
             ),
           ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search a store, member, etc.",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  prefixIcon: Icon(Icons.search),
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 10.0), // Adjusted padding
-                ),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              child: Wrap(
-                spacing: 8.0,
-                children: [
-                  _buildButton(
-                      Icons.location_on, "Recs", Colors.purple), // Changed icon
-                  _buildButton(Icons.trending_up, "Trending", Colors.purple),
-                  _buildButton(Icons.group, "Friend Recs", Colors.purple),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10, // Adjust the number of feed items
-                itemBuilder: (context, index) {
-                  // Replace these values with actual data or a data model
-                  String userName = "User $index";
-                  String itemFound = "Item $index";
-                  String storeName = "Store $index";
-                  String timeAgo = "${index + 1} hours ago";
-
-                  return _buildFeedItem(
-                      userName, itemFound, storeName, timeAgo);
-                },
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: _buildBottomNavigationBar(),
         backgroundColor: Colors.white,
       ),
     );
   }
+}
 
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(SimpleLineIcons.list), // Updated icon
-          label: 'Feed',
+class FeedView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'thrifti',
+          style: TextStyle(
+            color: Colors.purple,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(SimpleLineIcons.bag), // Updated icon
-          label: 'Your Finds',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(SimpleLineIcons.magnifier), // Updated icon
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(SimpleLineIcons.heart), // Updated icon
-          label: 'Favorites',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(SimpleLineIcons.user), // Updated icon
-          label: 'Profile',
-        ),
-      ],
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(SimpleLineIcons.bell, color: Colors.black),
+            onPressed: () {
+              // Handle notification bell press
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Search a store, member, etc.",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+                prefixIcon: Icon(Icons.search),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: Wrap(
+              spacing: 8.0,
+              children: [
+                _buildButton(Icons.location_on, "Recs", Colors.purple),
+                _buildButton(Icons.trending_up, "Trending", Colors.purple),
+                _buildButton(Icons.group, "Friend Recs", Colors.purple),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                String userName = "User $index";
+                String itemFound = "Item $index";
+                String storeName = "Store $index";
+                String timeAgo = "${index + 1} hours ago";
+
+                return _buildFeedItem(userName, itemFound, storeName, timeAgo);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -131,8 +154,7 @@ class MainApp extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        padding: EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 8.0), // Adjusted padding
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       ),
     );
   }
@@ -176,15 +198,13 @@ class MainApp extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(
-                              icon: Icon(SimpleLineIcons.heart), // Changed icon
+                              icon: Icon(SimpleLineIcons.heart),
                               onPressed: () {}),
                           IconButton(
-                              icon:
-                                  Icon(SimpleLineIcons.bubble), // Changed icon
+                              icon: Icon(SimpleLineIcons.bubble),
                               onPressed: () {}),
                           IconButton(
-                              icon: Icon(
-                                  SimpleLineIcons.paper_plane), // Changed icon
+                              icon: Icon(SimpleLineIcons.paper_plane),
                               onPressed: () {}),
                         ],
                       ),
@@ -209,6 +229,105 @@ class MainApp extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ProfileView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            // Top section with name and share icon
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Firstname Lastname',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: () {
+                    // Handle share
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            // Profile picture placeholder
+            CircleAvatar(
+              radius: 50, // Adjust the size as needed
+              backgroundColor: Colors.grey[300],
+            ),
+            SizedBox(height: 8.0),
+            // Username and membership duration
+            Text(
+              '@username',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Text(
+              'Member since Month Year',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            SizedBox(height: 16.0),
+            // Edit profile button
+            ElevatedButton(
+              onPressed: () {
+                // Handle edit profile
+              },
+              child: Text('Edit Profile'),
+            ),
+            SizedBox(height: 16.0),
+            // Followers and Following counts
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text('Followers',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('0'), // Placeholder count
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Text('Following',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('0'), // Placeholder count
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            // Sections: Finds, Visited, Preferences
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _buildSection(Icons.search, 'Finds'),
+                _buildSection(Icons.place, 'Visited'),
+                _buildSection(Icons.star, 'Preferences'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSection(IconData icon, String label) {
+    return Column(
+      children: <Widget>[
+        Icon(icon, size: 28),
+        Text(label),
+      ],
     );
   }
 }
