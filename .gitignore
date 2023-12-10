@@ -32,6 +32,22 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Android related
+/android/
+
+# iOS/XCode related
+/ios/
+
+# MacOS related
+/macos/
+
+# Web related (in "web" folder)
+/web/
+
+# Windows related
+/windows/
+
+
 # Symbolication related
 app.*.symbols
 
