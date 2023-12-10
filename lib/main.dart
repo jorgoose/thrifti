@@ -32,71 +32,55 @@ class MainApp extends StatelessWidget {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search a store, member, etc.",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    prefixIcon: Icon(Icons.search),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 10.0), // Adjusted padding
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search a store, member, etc.",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
                   ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  prefixIcon: Icon(Icons.search),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 10.0), // Adjusted padding
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Wrap(
-                  spacing: 8.0,
-                  children: [
-                    _buildButton(Icons.location_on, "Recs",
-                        Colors.purple), // Changed icon
-                    _buildButton(Icons.trending_up, "Trending", Colors.purple),
-                    _buildButton(Icons.group, "Friend Recs", Colors.purple),
-                  ],
-                ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Wrap(
+                spacing: 8.0,
+                children: [
+                  _buildButton(
+                      Icons.location_on, "Recs", Colors.purple), // Changed icon
+                  _buildButton(Icons.trending_up, "Trending", Colors.purple),
+                  _buildButton(Icons.group, "Friend Recs", Colors.purple),
+                ],
               ),
-              SingleChildScrollView(
-                // Making the feed section scrollable
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 16.0),
-                      child: Text(
-                        'Your Feed',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ),
-                    _buildFeedItem("Taylor", "Green Sweater", "Thrift Store X",
-                        "7 hours ago"),
-                    _buildFeedItem(
-                        "Alex", "Vintage Jacket", "Retro Finds", "1 day ago"),
-                    _buildFeedItem(
-                        "Jordan", "Leather Boots", "Bargain Bin", "2 days ago"),
-                    _buildFeedItem(
-                        "Morgan", "Retro Lamp", "Vintage Corner", "3 days ago"),
-                    _buildFeedItem(
-                        "Sam", "Antique Vase", "Old Treasures", "4 days ago"),
-                    // Add more feed items here
-                  ],
-                ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 10, // Adjust the number of feed items
+                itemBuilder: (context, index) {
+                  // Replace these values with actual data or a data model
+                  String userName = "User $index";
+                  String itemFound = "Item $index";
+                  String storeName = "Store $index";
+                  String timeAgo = "${index + 1} hours ago";
+
+                  return _buildFeedItem(
+                      userName, itemFound, storeName, timeAgo);
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         bottomNavigationBar: _buildBottomNavigationBar(),
         backgroundColor: Colors.white,
