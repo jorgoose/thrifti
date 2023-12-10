@@ -23,6 +23,14 @@ class MainApp extends StatelessWidget {
           ),
           backgroundColor: Colors.white,
           elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(SimpleLineIcons.bell, color: Colors.black),
+              onPressed: () {
+                // Handle notification bell press
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -40,8 +48,8 @@ class MainApp extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.grey[200],
                     prefixIcon: Icon(Icons.search),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0), // Reduced height
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 10.0), // Adjusted padding
                   ),
                 ),
               ),
@@ -79,6 +87,10 @@ class MainApp extends StatelessWidget {
                         "Alex", "Vintage Jacket", "Retro Finds", "1 day ago"),
                     _buildFeedItem(
                         "Jordan", "Leather Boots", "Bargain Bin", "2 days ago"),
+                    _buildFeedItem(
+                        "Morgan", "Retro Lamp", "Vintage Corner", "3 days ago"),
+                    _buildFeedItem(
+                        "Sam", "Antique Vase", "Old Treasures", "4 days ago"),
                     // Add more feed items here
                   ],
                 ),
@@ -135,6 +147,8 @@ class MainApp extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
+        padding: EdgeInsets.symmetric(
+            horizontal: 16.0, vertical: 8.0), // Adjusted padding
       ),
     );
   }
@@ -147,8 +161,19 @@ class MainApp extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text('$userName found $itemFound',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            title: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                      text: '$userName ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: 'found '),
+                  TextSpan(
+                      text: '$itemFound',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -180,7 +205,7 @@ class MainApp extends StatelessWidget {
                         ],
                       ),
                       IconButton(
-                          icon: Icon(Icons.bookmark_outline), onPressed: () {}),
+                          icon: Icon(SimpleLineIcons.plus), onPressed: () {}),
                     ],
                   ),
                 ),
