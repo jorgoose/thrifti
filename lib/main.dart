@@ -1,5 +1,18 @@
+/*
+  This is the main file for the thrifti app. It contains the main app widget and the views for the feed and profile.
+
+  thrifti is a social media app for thrift store enthusiasts. Users can share their finds, follow other users, and discover new thrift stores.
+  Users can score thrift stores they've visited on a few different categories ("Selection", "Vibes" and "Prices") and see how other users have scored the same stores.
+  Users can also see a feed of finds from people they follow, and can like, comment, and share these finds.
+  Lastly, users can set their preferences for the types of items they're interested in, and see a feed of finds that match their preferences.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart'; // For modern icons
+
+// Flutter map import
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,11 +28,11 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     FeedView(),
-    Text('Your Finds'),
-    Text('Search'),
-    Text('Favorites'),
+    ExploreView(), // This is the new explore view
+    const Text('Search'),
+    const Text('Your Finds'),
     ProfileView(), // This is the new profile view
   ];
 
@@ -43,16 +56,16 @@ class _MainAppState extends State<MainApp> {
               label: 'Feed',
             ),
             BottomNavigationBarItem(
-              icon: Icon(SimpleLineIcons.heart),
-              label: 'Your Finds',
+              icon: Icon(SimpleLineIcons.map),
+              label: 'Explore',
             ),
             BottomNavigationBarItem(
               icon: Icon(SimpleLineIcons.magnifier),
               label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(SimpleLineIcons.star),
-              label: 'Favorites',
+              icon: Icon(SimpleLineIcons.drawer),
+              label: 'Your Finds',
             ),
             BottomNavigationBarItem(
               icon: Icon(SimpleLineIcons.user),
@@ -75,7 +88,7 @@ class FeedView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'thrifti',
           style: TextStyle(
             color: Colors.purple,
@@ -108,9 +121,9 @@ class FeedView extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Colors.grey[200],
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
               ),
             ),
           ),
@@ -172,11 +185,11 @@ class FeedView extends StatelessWidget {
                 children: [
                   TextSpan(
                       text: '$userName ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: 'found '),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const TextSpan(text: 'found '),
                   TextSpan(
-                      text: '$itemFound',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      text: itemFound,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -187,7 +200,7 @@ class FeedView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     'Bought from $storeName',
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
                 Padding(
@@ -198,18 +211,19 @@ class FeedView extends StatelessWidget {
                       Row(
                         children: [
                           IconButton(
-                              icon: Icon(SimpleLineIcons.heart),
+                              icon: const Icon(SimpleLineIcons.heart),
                               onPressed: () {}),
                           IconButton(
-                              icon: Icon(SimpleLineIcons.bubble),
+                              icon: const Icon(SimpleLineIcons.bubble),
                               onPressed: () {}),
                           IconButton(
-                              icon: Icon(SimpleLineIcons.paper_plane),
+                              icon: const Icon(SimpleLineIcons.paper_plane),
                               onPressed: () {}),
                         ],
                       ),
                       IconButton(
-                          icon: Icon(SimpleLineIcons.plus), onPressed: () {}),
+                          icon: const Icon(SimpleLineIcons.plus),
+                          onPressed: () {}),
                     ],
                   ),
                 ),
@@ -217,7 +231,7 @@ class FeedView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2.0),
                   child: Text(
                     timeAgo,
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
               ],
@@ -246,7 +260,7 @@ class ProfileView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
+                const Text(
                   'Firstname Lastname',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -261,23 +275,23 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             // Profile picture placeholder
             CircleAvatar(
               radius: 50, // Adjust the size as needed
               backgroundColor: Colors.grey[300],
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             // Username and membership duration
-            Text(
+            const Text(
               '@username',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            Text(
+            const Text(
               'Member since December 2023',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             // Edit profile button
             ElevatedButton(
               onPressed: () {
@@ -285,9 +299,9 @@ class ProfileView extends StatelessWidget {
               },
               child: Text('Edit Profile'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             // Followers and Following counts
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Column(
@@ -306,7 +320,7 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             // Sections: Finds, Visited, Preferences
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -328,6 +342,50 @@ class ProfileView extends StatelessWidget {
         Icon(icon, size: 28),
         Text(label),
       ],
+    );
+  }
+}
+
+// This is the view for "Explore", which shows a map (for now, just a basic map, no functionality yet)
+// thrifti is a social media app for thrift store enthusiasts. Users can share their finds, follow other users, and discover new thrift stores.
+// Lastly, users can set their preferences for the types of items they're interested in, and see a feed of finds that match their preferences.
+// We will start by implementing the map for the user. We will use flutter_map package (v 6.1.0) to implement the map.
+class ExploreView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'thrifti',
+          style: TextStyle(
+            color: Colors.purple,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(SimpleLineIcons.bell, color: Colors.black),
+            onPressed: () {
+              // Handle notification bell press
+            },
+          ),
+        ],
+      ),
+      body: FlutterMap(
+        options: const MapOptions(
+          initialCenter: LatLng(40.7128, -74.0060),
+          initialZoom: 10.0,
+        ),
+        children: [
+          TileLayer(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'],
+          ),
+        ],
+      ),
     );
   }
 }
